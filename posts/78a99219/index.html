@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.1.0">
+
+<link rel="preconnect" href="null//null" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.lycheeee.top","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.11.1","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="我是笔记软件的重度使用者，前些年在各种笔记软件中兜兜转转，最后固定在了为知笔记并使用了多年，除了同步偶尔抽风以外可以说是相当满意。然而天有不测风云，为知笔记团队在佛系更新好几年后突然掏出了个重构版WizNote X出来。虽然不少文章把它吹得天花乱坠，但我下载下来一使用，发现这个新版本基本上把我中意的功能全部浪没了，看着充值到2023年的为知笔记会员，不由得悲从中来。虽说经典版目前也在更新，但为知笔">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用微力同步实现Obsidian的多设备同步">
+<meta property="og:url" content="https://blog.lycheeee.top/posts/78a99219/index.html">
+<meta property="og:site_name" content="Lychee&#39;s Blog">
+<meta property="og:description" content="我是笔记软件的重度使用者，前些年在各种笔记软件中兜兜转转，最后固定在了为知笔记并使用了多年，除了同步偶尔抽风以外可以说是相当满意。然而天有不测风云，为知笔记团队在佛系更新好几年后突然掏出了个重构版WizNote X出来。虽然不少文章把它吹得天花乱坠，但我下载下来一使用，发现这个新版本基本上把我中意的功能全部浪没了，看着充值到2023年的为知笔记会员，不由得悲从中来。虽说经典版目前也在更新，但为知笔">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-25T02:16:18.000Z">
+<meta property="article:modified_time" content="2022-01-25T02:19:59.215Z">
+<meta property="article:author" content="Lychee">
+<meta property="article:tag" content="笔记工具">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.lycheeee.top/posts/78a99219/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.lycheeee.top/posts/78a99219/","path":"posts/78a99219/","title":"利用微力同步实现Obsidian的多设备同步"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>利用微力同步实现Obsidian的多设备同步 | Lychee's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Lychee's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Lychee's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-联系方式"><a href="/message/" rel="section"><i class="fa fa-envelope fa-fw"></i>联系方式</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lychee"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lychee</p>
+  <div class="site-description" itemprop="description">Unknown to Death, nor known to Life</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://lycheeee.top/" title="Home → https:&#x2F;&#x2F;lycheeee.top" rel="noopener" target="_blank"><i class="fa fa-home fa-fw"></i>Home</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://steamcommunity.com/profiles/76561198106926364" title="Steam → https:&#x2F;&#x2F;steamcommunity.com&#x2F;profiles&#x2F;76561198106926364" rel="noopener" target="_blank"><i class="fab fa-steam-square fa-fw"></i>Steam</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/Lychee3005" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Lychee3005" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.bgme.me/" title="https:&#x2F;&#x2F;blog.bgme.me&#x2F;" rel="noopener" target="_blank">│ bgme │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://gibber.alonecomplex.xyz/" title="https:&#x2F;&#x2F;gibber.alonecomplex.xyz&#x2F;" rel="noopener" target="_blank">│ CyberAmoeba │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://fivest.one/" title="http:&#x2F;&#x2F;fivest.one&#x2F;" rel="noopener" target="_blank">│ fivestone │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.aufomm.com/" title="https:&#x2F;&#x2F;www.aufomm.com&#x2F;" rel="noopener" target="_blank">│ FoMM │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://iulia.moe/" title="http:&#x2F;&#x2F;iulia.moe&#x2F;" rel="noopener" target="_blank">│ Iulia │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://i.nebula.moe/" title="https:&#x2F;&#x2F;i.nebula.moe&#x2F;" rel="noopener" target="_blank">│ Nebula │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://sanmeiji.github.io/" title="https:&#x2F;&#x2F;sanmeiji.github.io&#x2F;" rel="noopener" target="_blank">│ SΛN明治 │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://co5.me/" title="https:&#x2F;&#x2F;co5.me&#x2F;" rel="noopener" target="_blank">│ Shioko │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.itswincer.com/" title="https:&#x2F;&#x2F;blog.itswincer.com&#x2F;" rel="noopener" target="_blank">│ Wincer │</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://nachtzug.xyz/" title="https:&#x2F;&#x2F;nachtzug.xyz&#x2F;" rel="noopener" target="_blank">│ 希兹露 │</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.lycheeee.top/posts/78a99219/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lychee">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lychee's Blog">
+      <meta itemprop="description" content="Unknown to Death, nor known to Life">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="利用微力同步实现Obsidian的多设备同步 | Lychee's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          利用微力同步实现Obsidian的多设备同步
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-01-25 10:16:18 / 修改时间：10:19:59" itemprop="dateCreated datePublished" datetime="2022-01-25T10:16:18+08:00">2022-01-25</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>我是笔记软件的重度使用者，前些年在各种笔记软件中兜兜转转，最后固定在了<a target="_blank" rel="noopener" href="https://www.wiz.cn/zh-cn/">为知笔记</a>并使用了多年，除了同步偶尔抽风以外可以说是相当满意。然而天有不测风云，为知笔记团队在佛系更新好几年后突然掏出了个重构版WizNote X出来。虽然不少文章把它吹得天花乱坠，但我下载下来一使用，发现这个新版本基本上把我中意的功能全部浪没了，看着充值到2023年的为知笔记会员，不由得悲从中来。虽说经典版目前也在更新，但为知笔记未来的重心一定会在重构版上，说不定哪天就不再支持经典版，得早点准备一个替代方案才行。</p>
+<span id="more"></span>
+<p>先梳理一下我对笔记软件的要求：</p>
+<ol>
+<li>可以实现多平台、多设备同步，同步速度要求较快且较稳定，不要设置设备数限制（说的就是你，印象笔记）；</li>
+<li>全设备支持Markdown的编辑和渲染（基于这个原因排除OneNote），且支持Markwodn源码和渲染模式的切换（类似Typora，或者左右两栏分别显示），配置基于Markdown的辅助和增强功能更佳；</li>
+<li>文件需要以非加密的形式保存在本地，而不是仅保存在运营商的服务器上（基于这个原因排除一大堆笔记软件）；</li>
+<li>有比较好用的全局搜索，支持条件搜索更佳；</li>
+<li>可以上传附件，且数量不限、格式不限；</li>
+<li>存储空间不要太小；</li>
+<li>可以导出多种常见格式；</li>
+<li>具备一定的自定义空间；</li>
+<li>不要有明显的广告；</li>
+<li>可以付费但不能太多，一年100元人民币以内可以接受。</li>
+</ol>
+<p>经典版的为知笔记完美契合上述条件，即便软件本身不支持一些功能，通过安装插件也可以解决，所以即便有各种各样的小BUG，我还是一直用着。至于WizNote X……唉不提了。如今想找一个这样的替代品却也没那么容易，市面上笔记软件虽多，我左看右看没一个满意，花里胡哨的一点也不实用。最后想到之前爽妹安利给我的<a target="_blank" rel="noopener" href="https://obsidian.md/">Obsidian</a>，大约半年前也出了移动端，于是仔细研究了一下，蓦然发现除了同步功能以外简直就是我梦寐以求的笔记软件了。</p>
+<p>Obsidian主要具备以下几个优点：</p>
+<ol>
+<li>所有文件和附件均以原始形式保存在本地，Obsidian的“库”本质上就是一个个的本地文件夹。即便有一天Obsidian倒闭，或者我们不想再使用Obsidian，里面的笔记也不会丢失，还可以用别的Markdown编辑软件打开它们。这点要比经典版的为知笔记做得更好，为知笔记保存在本地的笔记文件会转换成<code>.html</code>，而Obsidian的<code>.md</code>笔记就是<code>.md</code>格式。</li>
+<li>Obsidian软件免费版几乎包含全部功能，不像广大黑心软件商一样实用功能都要付费才能解锁。Obsidian的付费功能基本只涉及同步和网页发布两个功能，免费版实际上就相当于一个本地的编辑软件，因此即便哪天团队停止支持，也可以照样使用软件，不受影响。</li>
+<li>Obsidian具备许多功能强大的第三方插件，提供了大量实用性功能，比如添加Note Blocks、用MultiMarkdown语法书写合并行或列的表格、实现像<a target="_blank" rel="noopener" href="https://dynalist.io/">Dynalist</a>一样的大纲功能、添加看板、添加流程图、添加思维导图等等，总之书写上的一些实用性功能几乎都有了。同样，这些插件文件也是保存在本地的。Obsidian开放了API，有技术能力的人如果有需求，还可以自己开发插件。</li>
+<li>作为<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Zettelkasten">Zettelkasten</a>类的笔记软件，介绍Obsidian就一定要介绍它的核心功能——双向链接。一个库内的所有笔记都可以通过双向链接的方式进行关联，还可以很方便地查看一个笔记的所有反向链接（即哪些笔记中链接了该笔记），由此便可打造一个知识的“网络”。Obsidian还内置了关系图谱，可以直观地查看笔记之间的关联。</li>
+</ol>
+<p>那么接下来的问题就是，同步功能该怎么解决？如上所述，Obsidian的付费版可以解锁同步功能，但每个月要花10美元之多，这就有点不值当了。好在Obsidian的设计思想非常地开明，支持第三方同步，甚至还把它写进了官方文档里。因为Obsidian的库本质上就是一个文件夹，只要我们能想办法做到把这个文件夹从一个设备同步到另一个设备，然后再从另一个设备的Obsidian定位到这个文件夹，就可以正常使用了。甚至我们在PC上的设置文件，手机端可以直接拿来用，第三方插件大多也支持移动端，不得不感叹Obsidian多平台客户端间的兼容性实在是太好了，开发团队真是一群神人。</p>
+<p>PC与PC间的文件同步很简单，找市面上任意一个同步软件，两边一安装，设置同步文件夹就可以了。PC与手机之间的文件同步就比较难，因为市面上的同步软件基本上不会把文件直接同步进手机的存储目录里，也很难同步手机文件夹里的文件。iOS系统还有iCloud这个选择，Android就比较麻烦。Android系统要实现这个目标，有两种思路：</p>
+<p>第一种，使用<a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=dk.tacit.android.foldersync.lite&amp;hl=zh">FolderSync</a>+同步软件的组合。FolderSync可以实现手机端文件夹的同步，并支持若干主流的同步服务商，如Google Drive、OneDrive等等，似乎也支持国内的坚果云。设置好同步文件夹及同步软件，就可以实现两者间的同步。但我尝试了一下FolderSync+OneDrive，完全没有办法同步，该打开的权限都打开了，不明白是什么原因导致的。另外，同步软件还有一个可靠性的问题，国际上这些主流的同步软件，国内使用起来速度和稳定性都有点感人，且没准哪天就会被墙，而坚果云等国内厂商则面临着可能会被无端封账号的风险，懂的都懂。</p>
+<p>第二种，使用多平台的P2P文件同步软件。这种方法天然解决了手机端同步的问题，且文件仅在设备间进行传输，不存储在服务器上，隐私性和稳定性得到了保证，也极大程度地避免了被封号的问题。这种同步软件按照同步原理，又有以下两类代表：（1）<a target="_blank" rel="noopener" href="https://www.resilio.com/individuals/">Resilio Sync</a>及<a target="_blank" rel="noopener" href="http://www.verysync.com/">微力同步</a>，使用类似BT的协议传输；（2）<a target="_blank" rel="noopener" href="https://syncthing.net/">Syncthing</a>，开源软件，使用的是开放的块交换协议。与Resilio Sync、微力同步相比，Syncthing使用的传输协议是开放透明的，更加安全，这是它的优点。但我实际使用起来，发现非局域网的两台设备使用它的Discovery Server传输根本没有速度可言，好半天才达到了1B/s（是的，是B/s而不是KB/s），完全无法使用，如果想正常传输，则需要自己搭建Discovery Server，对于简单的笔记同步的需求来说实在没有必要。而Resilio Sync又很不幸地在国内被墙（据说也有继续使用的方法，不过我没有仔细研究）。微力同步是在Resilio Sync被墙之后仿照其制作的一个同步软件，传输速度还是相当不错的（毕竟是BT协议），虽然是Resilio Sync的仿品，但是国内的网络环境就这样，也没什么办法。</p>
+<p>于是经过一番尝试，最终选择了微力同步作为Obsidian的第三方同步工具。设置方法简述如下：</p>
+<ol>
+<li>在微力同步的<a target="_blank" rel="noopener" href="http://www.verysync.com/download.html">下载页面</a>下载所需平台的客户端。下面以从Windows系统向Android系统同步为例进行说明。</li>
+<li>Windows系统上的客户端设置：
+<ol>
+<li>首次启动时，在弹出的页面上勾选协议，并设置该设备的名称，点击“开始使用”，进入主界面。</li>
+<li>在主界面的“同步”tab里，点击左上角的图标，添加需要同步的文件夹。这里我将Obsidian的所有库都放在了一个文件夹内，在软件里添加该文件夹后，即可显示在页面上。单击条目就会出现详细信息。</li>
+<li>点击条目右侧的齿轮，进入“选项设置”，进行名称、标签、同步功能等设置。说明：
+<ol>
+<li>仅发送模式：勾选后只进行单向同步（仅发送不接收），不进行双向同步。是否勾选看自己的需求。手机端编辑文件不太舒适，只用作阅读是最佳的。但微力同步的传输原理决定传输的两个设备都需要实时在线，如果我们想在两台电脑间进行同步，但两台电脑不是全开着，就无法直接进行同步（比如家中电脑和单位电脑）。这个情况下就可以利用万能的手机进行中转，先从电脑A同步到手机，再从手机同步到电脑B，反之亦然，这样就需要进行双向同步。</li>
+<li>选择性同步：启用后不同步全部文件，而是选择哪个文件同步哪个。这里我们的用途是进行笔记文件的同步，选择性同步不符合实际需求，所以务必不要开启。</li>
+<li>忽略列表：每个Obsidian库文件夹里都有一个<code>.obsidian</code>文件夹，用于记录该库的Obsidian相应设置。这些设置文件可以直接同步到手机端进行使用。若不想同步设置，或未来不同平台客户端的兼容性有变化，就将这个文件夹添加到“忽略列表”里，同步时将略过该文件夹。</li>
+</ol>
+</li>
+<li>“同步”tab下选择左侧的“同步设置”，进行相应的设置（如无特殊需求，保持默认即可）。</li>
+<li>点击主界面的“设置”tab，进行相应的设置（如无特殊需求，保持默认即可）。</li>
+</ol>
+</li>
+<li>Android系统上的客户端设置：
+<ol>
+<li>首次启动时，把它需要的权限都打开，这样才能正常工作。设置好后进入主界面。</li>
+<li>主界面“文件夹”tab下可能会有一个默认文件夹，没什么用，可以点击右侧的info图标，然后点击右上方的删除图标删除掉。</li>
+<li>点击左上角图标呼出菜单栏，选择“设置”，进行相应的设置。由于同步需要两台设备同时在线，推荐勾选“设备开机启动后自动后台运行”。</li>
+</ol>
+</li>
+<li>连接两台设备：
+<ol>
+<li>Windows端，点击同步——设备管理——我的设备——本机ID，出现设备ID及二维码。</li>
+<li>Android端，切换到“设备”tab，点击右上角的“+”号，再点击设备标识右侧的二维码图标，扫描Windows端的二维码，确定后即可Windows端为远程设备。</li>
+<li>看Windows端是否能自动识别并添加Android端，如不能，在Android端呼出菜单栏，点击“显示设备ID”，把ID复制下来，在Windows端“我的设备”处点击“添加设备”，在“设备标识”处粘贴ID，即可添加Android端为远程设备。</li>
+</ol>
+</li>
+<li>将Windows端的文件夹同步至Android端：
+<ol>
+<li>Windows端，同步——同步目录，点击文件夹条目右侧的分享图标，在弹窗中选择“只读”（单向同步）或“读写”（双向同步）权限，生成共享二维码。</li>
+<li>Android端，切换到“文件夹”tab，点击右上角的“+”号，选择“扫描二维码”，扫描Windows端的共享二维码，设置在本机存储空间存储的位置。最好设置一个方便找到的位置，以便在Obsidian app中定位。添加文件夹后，再点击文件夹右侧的info图标，进行名称、标签、同步功能等设置（需要注意的事项同Windows端相应设置）。</li>
+</ol>
+</li>
+</ol>
+<p>进行上述设置后，就可以看到两个设备间开始进行文件同步。保持两个设备同时开启，就可以进行实时同步了。</p>
+<p>最后，进入Obsidian app，选择打开库文件夹，找到相应文件夹同步到手机中的目录，就可以在手机端进行使用了。</p>
+<p>使用微力同步作为Obsidian的第三方同步方案，目前来看还是相当简单便捷的，不过也不排除微力同步将来发生政策变化，或者团队跑路的可能，这样的话只能再去找一个替代品。实在不行还有一个终极解决方案——Git，将电脑上的文件push到一个private repo上，再在手机端安装一个git工具，把文件pull下来；事实上，Obsidian的第三方插件中就有Obsidian Git，用于每隔一段时间自动push文件（仅电脑端可使用），顺便还能进行版本控制。不过终究还是麻烦了一些，对于笔记同步来说，用现成的同步工具还是最省事的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Lychee
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.lycheeee.top/posts/78a99219/" title="利用微力同步实现Obsidian的多设备同步">https://blog.lycheeee.top/posts/78a99219/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AC%94%E8%AE%B0%E5%B7%A5%E5%85%B7/" rel="tag"># 笔记工具</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/cc99a04/" rel="prev" title="《犯罪心理研究：在犯罪防控中的作用》笔记">
+                  <i class="fa fa-chevron-left"></i> 《犯罪心理研究：在犯罪防控中的作用》笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/b68e56eb/" rel="next" title="年末总结2021">
+                  年末总结2021 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lychee</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">366k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">10:11</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css" integrity="sha256-TThEtR+XalhWKkfF383YLOrI50NGNeIqrzS+q08afrY=" crossorigin="anonymous">
+
+
+
+</body>
+</html>
