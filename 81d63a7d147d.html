@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.lycheeee.top","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="基于一些个人使用所总结出的经验。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 OBS Studio 进行视频直播和录制">
+<meta property="og:url" content="https://blog.lycheeee.top/81d63a7d147d.html">
+<meta property="og:site_name" content="Lychee&#39;s Blog">
+<meta property="og:description" content="基于一些个人使用所总结出的经验。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.lycheeee.top/images/20200308/OBS-%E9%AB%98%E7%BA%A7%E9%9F%B3%E9%A2%91%E5%B1%9E%E6%80%A7.png">
+<meta property="og:image" content="https://blog.lycheeee.top/images/20200308/VoiceMeeter-Banana-Virtual-Inputs.png">
+<meta property="article:published_time" content="2020-03-08T08:46:57.000Z">
+<meta property="article:modified_time" content="2022-01-25T02:16:46.732Z">
+<meta property="article:author" content="Lychee">
+<meta property="article:tag" content="视频工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.lycheeee.top/images/20200308/OBS-%E9%AB%98%E7%BA%A7%E9%9F%B3%E9%A2%91%E5%B1%9E%E6%80%A7.png">
+
+
+<link rel="canonical" href="https://blog.lycheeee.top/81d63a7d147d.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.lycheeee.top/81d63a7d147d.html","path":"81d63a7d147d.html","title":"使用 OBS Studio 进行视频直播和录制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 OBS Studio 进行视频直播和录制 | Lychee's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" crossorigin="anonymous">
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Lychee's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Lychee's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-联系方式"><a href="/message/" rel="section"><i class="fa fa-envelope fa-fw"></i>联系方式</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OBS%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">OBS基本设置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8OBS%E8%BF%9B%E8%A1%8C%E7%9B%B4%E6%92%AD"><span class="nav-number">2.</span> <span class="nav-text">使用OBS进行直播</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E6%B5%81"><span class="nav-number">2.1.</span> <span class="nav-text">推流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7"><span class="nav-number">2.2.</span> <span class="nav-text">辅助工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8OBS%E5%BD%95%E5%88%B6%E8%A7%86%E9%A2%91"><span class="nav-number">3.</span> <span class="nav-text">使用OBS录制视频</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%A6%BB%E6%9D%A5%E8%87%AA%E5%8D%95%E4%B8%80%E6%B8%B8%E6%88%8F%E6%88%96%E5%BA%94%E7%94%A8%E7%9A%84%E9%9F%B3%E9%A2%91"><span class="nav-number">3.1.</span> <span class="nav-text">分离来自单一游戏或应用的音频</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lychee"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lychee</p>
+  <div class="site-description" itemprop="description">Unknown to Death, nor known to Life</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://lycheeee.top/" title="Home → https:&#x2F;&#x2F;lycheeee.top" rel="noopener me" target="_blank"><i class="fa fa-home fa-fw"></i>Home</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://steamcommunity.com/profiles/76561198106926364" title="Steam → https:&#x2F;&#x2F;steamcommunity.com&#x2F;profiles&#x2F;76561198106926364" rel="noopener me" target="_blank"><i class="fab fa-steam-square fa-fw"></i>Steam</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/Lychee3005" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Lychee3005" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://blog.bgme.me/" title="https:&#x2F;&#x2F;blog.bgme.me&#x2F;" rel="noopener" target="_blank">│ bgme │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://fivest.one/" title="http:&#x2F;&#x2F;fivest.one&#x2F;" rel="noopener" target="_blank">│ fivestone │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.aufomm.com/" title="https:&#x2F;&#x2F;www.aufomm.com&#x2F;" rel="noopener" target="_blank">│ FoMM │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="http://iulia.moe/" title="http:&#x2F;&#x2F;iulia.moe&#x2F;" rel="noopener" target="_blank">│ Iulia │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://www.jrneverland.top/" title="https:&#x2F;&#x2F;www.jrneverland.top&#x2F;" rel="noopener" target="_blank">│ Jason │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://i.nebula.moe/" title="https:&#x2F;&#x2F;i.nebula.moe&#x2F;" rel="noopener" target="_blank">│ Nebula │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://blog.wraith615.xyz/" title="https:&#x2F;&#x2F;blog.wraith615.xyz&#x2F;" rel="noopener" target="_blank">│ Nise │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://sanmeiji.github.io/" title="https:&#x2F;&#x2F;sanmeiji.github.io&#x2F;" rel="noopener" target="_blank">│ SΛN明治 │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://blog.itswincer.com/" title="https:&#x2F;&#x2F;blog.itswincer.com&#x2F;" rel="noopener" target="_blank">│ Wincer │</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="https://nachtzug.xyz/" title="https:&#x2F;&#x2F;nachtzug.xyz&#x2F;" rel="noopener" target="_blank">│ 希兹露 │</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.lycheeee.top/81d63a7d147d.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lychee">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lychee's Blog">
+      <meta itemprop="description" content="Unknown to Death, nor known to Life">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 OBS Studio 进行视频直播和录制 | Lychee's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 OBS Studio 进行视频直播和录制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-08 16:46:57" itemprop="dateCreated datePublished" datetime="2020-03-08T16:46:57+08:00">2020-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-01-25 10:16:46" itemprop="dateModified" datetime="2022-01-25T10:16:46+08:00">2022-01-25</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>11 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>基于一些个人使用所总结出的经验。</p>
+<span id="more"></span>
+<h1 id="OBS基本设置">OBS基本设置<a class="anchor" href="#OBS基本设置">¶</a></h1>
+<ol>
+<li>
+<p>安装<a target="_blank" rel="noopener" href="https://obsproject.com/">OBS Studio</a>。</p>
+</li>
+<li>
+<p>设置画布大小。控件——设置——视频，设置分辨率，如大小不确定，可以先设置为最大尺寸（显示器分辨率大小），在添加画面后还可以进一步调整。</p>
+</li>
+<li>
+<p>添加场景。场景相当于一种画面和声音预设，储存场景右边的“来源”设置。可以为不同的使用需求分别添加一种场景，例如可以在场景中分别添加“视频直播”与“视频录制”。</p>
+</li>
+<li>
+<p>在场景中添加视频来源。视频画面即由添加的来源构成。常用的来源：</p>
+<ul>
+<li>游戏捕获：可捕获大多数的游戏。可以设置捕获全屏游戏或者特定窗口，以及是否捕获光标。</li>
+<li>窗口捕获：只能捕获窗口。用于捕获经由虚拟机、DxWnd等运行的游戏及其它各种经过民间魔改的老游戏，和其他需要添加的窗口程序。同样可以设置是否捕获光标。</li>
+<li>显示器捕获：捕获整个显示器的画面。只在需要录制整个桌面的情况下使用，一般的游戏/窗口录制不建议使用。</li>
+<li>文本/图像/媒体源：如有需要显示在视频上的文字/图像/视频，可添加。常用于直播。</li>
+</ul>
+</li>
+<li>
+<p>调整画面排布。如需要根据画面来源的大小调整画布尺寸，可右键该来源（或同时选中几个来源），选择“调整输出大小（到源大小）”；如需要将游戏/窗口大小缩放至画布大小，可右键该来源，选择“变换——比例适配屏幕”。每更换一次主要的画面源，都需注意源大小和画布大小的设置是否需要更改。</p>
+</li>
+<li>
+<p>为游戏窗口添加滤镜（如有需要）。OBS一般无法捕捉到ENB或ReShade等画质补丁，因此可右键来源，选择滤镜，添加一些调色滤镜，起到一部分画质增强的效果。调色方面推荐养成使用LUT的好习惯，这样LUT也可直接导入到OBS的滤镜中。</p>
+</li>
+<li>
+<p>在场景中添加音频来源（如有需要）。可添加添加音频的输入和输出设备，添加后，在该场景的混音器中即会多出一个混音来源。在需要隔离出一种声音来源（比如仅收入游戏本身的声音，排除其他桌面声音）或者需分别录入来自多个麦克风的声音时可以使用。</p>
+</li>
+<li>
+<p>设置混音器中的声音来源。默认包含“桌面音频”与“麦克风”，如添加了额外的音频输入与输出，在混音器中也会相应地添加声音来源（与默认来源的各种设置逻辑相同，不赘述）。可单独设置每条声音来源的音量大小，如需录人声，一般应适当调小电脑声音。齿轮设置主要注意3个方面：</p>
+<ul>
+<li>滤镜：可添加多个滤镜，顺序为从上到下依次执行。推荐将每一条声音来源都添加一个限幅（-5 db），以免爆音。麦克风来源，推荐依次添加“噪音阈值、噪声抑制、增益（如有需要）、限幅”。</li>
+<li>属性：选择设备。“桌面音频”与“麦克风”一般为默认的输入与输出设备，问题不大，如额外添加了音频输入与输出来源，需根据实际需要选择输入与输出设备。</li>
+<li>高级音频属性：混音器中所有来源共用该属性，主要设置单声道/双声道，以及所在的轨道。推荐将麦克风设备设置为单声道。轨道设置主要用于直播/录制的不同需求，倘若一些情况下需要将电脑音频和麦克风声音录为同一条音轨（如直播），另一些情况下需要将电脑音频和麦克风进行分音轨的录制（这样可以对每一条音轨进行后期的处理），则可以进行如下图所示的设置，然后在控件——设置——输出中进行相应的修改（见下条）。
+<img src="/images/20200308/OBS-%E9%AB%98%E7%BA%A7%E9%9F%B3%E9%A2%91%E5%B1%9E%E6%80%A7.png" alt=""></li>
+</ul>
+</li>
+<li>
+<p>控件——设置——输出，将输出模式设为“高级”，这样可以做更多的设置。设置以下4个tab：</p>
+<ul>
+<li>串流：用于直播推流。
+<ul>
+<li>音轨：串流的音频只能推送一个音轨，因此在上面所示的例子中，选择同时包含电脑音频和麦克风声音的轨道，即轨道1。</li>
+<li>编码器：一般选择显卡编码器。</li>
+<li>速率控制：选择CBR，VBR可能会导致在画面变化比较大的时候实时比特率暴增导致画面卡顿的现象。</li>
+<li>比特率：根据需要设置，主要考虑到自己的网速（比较重要）和观众的网速（由于直播网站一般都会提供画质更低的清晰度所以问题不大）问题，个人一般设置到4000 - 6000 kbps。</li>
+</ul>
+</li>
+<li>录像：用于视频录制。
+<ul>
+<li>类型：选择“标准”。</li>
+<li>文件路径或URL：设置一个存储路径。不能是不存在的路径，否则会提示空间不足。</li>
+<li>音轨：根据需要设置，在上面所示的例子中，如果把所有声音录制为一条音轨，可选择轨道1；如果将电脑音频和麦克风分为两条音轨录制，可选择轨道2、3，这样可对两条音轨分别进行后期处理，但形成最终视频时要合成一条音轨。</li>
+<li>编码器：一般选择显卡编码器。</li>
+<li>速率控制：宜选择VBR，VBR可以选择平均比特率和最大比特率，兼顾录制效果和文件大小。</li>
+<li>比特率&amp;最大比特率：比特率可比直播设置稍高，后期根据需要进一步压缩（只要硬盘容量可以保证）。最大比特率可以设置较高，对变化比较大的画面录制效果较好。</li>
+</ul>
+</li>
+<li>音频：设置每个音频轨道的比特率。如果不对音质有特殊的高要求，可设置128 - 192 kbps。如果对音质有特别的要求，可以设置为320 kbps。</li>
+<li>回放缓存（可选）：可以选择启用回放缓存。主要用于直播，在点击“开始推流”时同时点击“开始回放缓存”，可以在游戏中随时保存过去一定时间（由“最长回放时间”决定）的录像。注意，如使用回放缓存，宜在热键中设置“保存回放”的快捷键。</li>
+</ul>
+</li>
+</ol>
+<h1 id="使用OBS进行直播">使用OBS进行直播<a class="anchor" href="#使用OBS进行直播">¶</a></h1>
+<h2 id="推流">推流<a class="anchor" href="#推流">¶</a></h2>
+<p>OBS本身并不具备直接推流到各个直播网站的功能，因此需要进行第三方推流的设置。以虎牙直播为例：</p>
+<ol>
+<li>安装<a target="_blank" rel="noopener" href="https://www.huya.com/download#players_pc">虎牙直播PC客户端</a>并登录。</li>
+<li>选择“直播设置”，进行房间标题等基本设置。</li>
+<li>打开需直播的游戏/窗口以及OBS，确认OBS的屏幕中正常显示画面。</li>
+<li>虎牙直播客户端中，选择“第三方推流”，点击“立即开播”，这样虎牙端的直播就会开启（但因为没有来自OBS的推送，会是黑屏状态），同时弹出推流服务器和密码的信息。</li>
+<li>切换到OBS，控件——设置——推流，此处可以设置推流服务的信息。OBS中已有若干项预设，但国内用户基本没有需求。自定义推流服务，则将服务设置为“自定义”，在下面的两栏内分别填写服务器和密码。一般一个网站的直播服务器和密码不会频繁变更，不用每次开播前都进行设置。</li>
+<li>回到OBS的主页面，点击控件下的“开始推流”，即可将媒体流推送到直播网站上。</li>
+<li>（可选）如有回放缓存的需要，点击控件下的“开始回放缓存”。</li>
+</ol>
+<p>结束推流时，先在OBS中点击“结束推流”，再回到直播软件中结束直播。</p>
+<h2 id="辅助工具">辅助工具<a class="anchor" href="#辅助工具">¶</a></h2>
+<p>直播网站自带的直播工具通常不是很好用，可以使用一些辅助工具。其中最为常用的工具是<a target="_blank" rel="noopener" href="http://www.obsapp.com/">小葫芦</a>。小葫芦制作了功能不同的多种插件，下面只介绍其中弹幕助手的设置（基本上只有这个比较有用）：</p>
+<ol>
+<li>安装<a target="_blank" rel="noopener" href="http://www.obsapp.com/apps/danmupro/">小葫芦弹幕助手</a>。</li>
+<li>打开小葫芦弹幕助手，设置直播平台和房间号（对于不同的直播平台，可添加不同的场景）。</li>
+<li>房间设置——平台账号，登录直播平台账号。登录后可以进行弹幕答谢等功能。</li>
+<li>选择弹幕模式。通常主播的需求是在玩游戏（主要是全屏游戏）的过程中可以看到弹幕列表，有时也需要在OBS中添加弹幕列表。根据需要选择以下弹幕模式：
+<ul>
+<li>桌面模式：普通模式，可以添加多个列表，例如将弹幕、礼物分为两个列表。基本没法在全屏游戏中显示，也无法添加到OBS中。</li>
+<li>OBS模式：可以添加到OBS中，但在OBS之外无法看见。只用于在直播画面中显示弹幕。</li>
+<li>全屏模式：在全屏游戏中显示弹幕列表，但支持的游戏有限，很多全屏游戏无法正常显示。可以添加多个列表，可以将全屏弹幕源添加到OBS中。</li>
+</ul>
+</li>
+<li>在相应的弹幕模式下设置弹幕列表，包括外观设置和功能设置。设置好后对列表设置“启用”和“自启动”。设置可以进行导入和导出。</li>
+<li>在“朗读&amp;发言”处进行弹幕朗读、弹幕答谢等设置（需登录房管账号）。</li>
+<li>设置完成后，推荐先关闭小葫芦弹幕助手软件（不是列表），在上述推流步骤完成后再打开弹幕助手，否则可能无法正常接收直播间信息。</li>
+</ol>
+<p>弹幕列表、弹幕答谢等具体的设置详见小葫芦官方的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av19052779">《小葫芦弹幕助手5.0教学视频》</a>。</p>
+<p>如何在全屏游戏中看弹幕是一个比较难解决的问题，弹幕助手的全屏模式也仅支持部分游戏。一个比较普适的解决方法为将游戏设置为窗口化/窗口最大化，使用桌面模式列表，将列表浮于窗口之上。</p>
+<h1 id="使用OBS录制视频">使用OBS录制视频<a class="anchor" href="#使用OBS录制视频">¶</a></h1>
+<p>OBS录制视频的操作很简单，按照“基本设置”的步骤设置好后，打开需录制的游戏/窗口，点击控件下的“开始录制”即可。录制完成后点击“结束录制”。主要介绍录制视频时的一些额外需求。</p>
+<h2 id="分离来自单一游戏或应用的音频">分离来自单一游戏或应用的音频<a class="anchor" href="#分离来自单一游戏或应用的音频">¶</a></h2>
+<p>混音器中默认的“电脑音频”会接收来自电脑上所有应用的声音。例如，如果在录制游戏的过程中系统弹出了一条消息，那么系统消息的声音也会被一起录入。通常在录制视频的时候，只需要录入电脑上来自单一应用的声音即可。这种需求可以通过虚拟声卡实现。以VB-Audio VoiceMeeter和Windows 10操作系统为例：</p>
+<ol>
+<li>安装<a target="_blank" rel="noopener" href="https://www.vb-audio.com/Voicemeeter/banana.htm">VB-Audio VoiceMeeter Banana</a>。</li>
+<li>打开VoiceMeeter，点击Menu，勾选“System Tray (Run at Startup)”。效果为让VoiceMeeter随系统自动启动。</li>
+<li>在Windows任务栏的右下角找到扬声器图标，右键，点击“打开声音设置”，查看当前的输出设备。</li>
+<li>切换回VoiceMeeter，将Hardware Out中的A1设置为当前的默认输出设备（有WDM选WDM）。</li>
+<li>切换回“打开声音设置”界面，将输出设备改为“VoiceMeeter Input”。</li>
+<li>拉到最下，点击“应用音量和设备首选项”。将该应用的输出改为“VoiceMeeter Aux Input”。</li>
+<li>打开OBS，在来源中添加“音频输出捕获”，点击齿轮，选择“属性”，将设备改为“VoiceMeeter Aux Input”。同时将默认的“桌面音频”静音。</li>
+<li>设置“音频输出捕获”的滤镜（添加限幅滤镜）和高级音频属性（主要是音轨），设置好后即可开始录制。</li>
+</ol>
+<p>经过上述设置后，VoiceMeeter Input即为除该应用外的其他电脑声音，VoiceMeeter Aux Input即为该应用的声音，Input和Aux Input一同输出到默认的硬件声卡。可以在VoiceMeeter中的Virtual Inputs栏进行声音设置（左边为Input，右边为Aux Input）。</p>
+<p><img src="/images/20200308/VoiceMeeter-Banana-Virtual-Inputs.png" alt=""></p>
+<p>上述设置会将系统的默认输出设备改为VoiceMeeter Input。如不想更改系统默认输出，可以跳过第4、5步，但硬件声卡将听不到来自该应用的声音。反之，也可设置为硬件声卡只接收该应用的声音而屏蔽其他声音。</p>
+<p>p.s. VoiceMeeter详细教程见<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av50588800">《B站首发电脑音频神器VoiceMeeter详解-从入门到精通+电脑录音直播案例演示》</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Lychee
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.lycheeee.top/81d63a7d147d.html" title="使用 OBS Studio 进行视频直播和录制">https://blog.lycheeee.top/81d63a7d147d.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E8%A7%86%E9%A2%91%E5%B7%A5%E5%85%B7/" rel="tag"># 视频工具</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/511e26055bde.html" rel="prev" title="中国传媒大学《游戏心理学》MOOC笔记">
+                  <i class="fa fa-angle-left"></i> 中国传媒大学《游戏心理学》MOOC笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/06a747f54570.html" rel="next" title="春天依旧会到来">
+                  春天依旧会到来 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Lychee</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">530k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">29:26</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
